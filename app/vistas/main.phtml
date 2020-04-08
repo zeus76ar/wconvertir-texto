@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <meta name="description" content="Aplicacion web para convertir texto a numero y viceversa.">
+        <meta name="author" content="AB software">
+        <meta name="keywords" content="convertidor, texto, numero, php, bootstrap">
+
+        <base href="<?php echo $config['url_base'] ?>">
+        <title>wConvertirTexto</title>
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" 
+        href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+        crossorigin="anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" 
+        href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" 
+        crossorigin="anonymous">
+
+        <link rel="stylesheet" href="assets/css/main.css">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    
+                    <a class="navbar-brand" href="#" 
+                    data-toggle="modal" data-target="#acercade"><?php echo $config['sistema'] ?></a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <ol class="breadcrumb">
+                        <li class="">Convertir Texto a Número</li>
+                    </ol>
+
+                    <form action="" role="form" method="POST" id="frmtn">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="texto">Texto</label>
+                                    <textarea name="texto" id="texto" rows="4" 
+                                    autofocus="1" class="form-control" 
+                                    placeholder="Ingrese el texto (hasta 500 caracteres)..." 
+                                    maxlength="500"><?php echo mostrarVarPost('texto') ?></textarea>
+                                    <span id="stexto" class="help-block hidden" style="color:#a94442;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <strong>Sistema</strong>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                        name="sistema" id="sist_1" value="d" 
+                                        class="opcion" 
+                                        <?php echo seleccionarVarOption('sistema', 'd') ?>>
+                                        &nbsp;Decimal
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                        name="sistema" id="sist_2" value="b"
+                                        class="opcion"
+                                        <?php echo seleccionarVarOption('sistema', 'b') ?>>
+                                        &nbsp;Binario
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                        name="sistema" id="sist_3" value="o"
+                                        class="opcion"
+                                        <?php echo seleccionarVarOption('sistema', 'o') ?>>
+                                        &nbsp;Octal
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                        name="sistema" id="sist_4" value="h"
+                                        class="opcion" 
+                                        <?php echo seleccionarVarOption('sistema', 'h') ?>>
+                                        &nbsp;Hexadecimal
+                                    </label>
+                                </div>
+                            </div>
+                        </div><!-- .row -->
+
+                        <button class="btn btn-primary" 
+                        type="button" id="bconvertirtn">Convertir</button>
+                    </form>
+                    <br>
+
+                    <?php if (isset($error_1) && (trim($error_1) != '')) { ?>
+                    
+                    <p class="bg-danger text-danger"><?php echo $error_1 ?></p>
+                    
+                    <?php }//fin if ?>
+
+                    <?php if (isset($numero)) { ?>
+                    
+                    <strong>Numero</strong>
+                    <textarea name="resultado_1" id="resultado_1" rows="4" 
+                    readonly="1" class="form-control"><?php echo $numero ?></textarea>
+                    
+                    <?php }//fin if ?>
+
+                    <br>
+                </div>
+
+                <div class="col-md-5 col-md-offset-2">
+                    <ol class="breadcrumb">
+                        <li class="">Convertir Número a Texto</li>
+                    </ol>
+                    
+                    <form action="" role="form" method="POST" id="frmnt">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="numero">Número</label>
+                                    <textarea name="numero" id="numero" rows="4" 
+                                    class="form-control" maxlength="4000"
+                                    placeholder="Ingrese el numero..."><?php echo mostrarVarPost('numero') ?></textarea>
+                                    <span id="snumero" class="help-block hidden" style="color:#a94442;"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <strong>Sistema</strong>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                        name="sistema_1" id="sist_1_1" value="d" 
+                                        class="opcion_1" 
+                                        <?php echo seleccionarVarOption('sistema_1', 'd') ?>>
+                                        &nbsp;Decimal
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                        name="sistema_1" id="sist_1_2" value="b"
+                                        class="opcion_1"
+                                        <?php echo seleccionarVarOption('sistema_1', 'b') ?>>
+                                        &nbsp;Binario
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                        name="sistema_1" id="sist_1_3" value="o"
+                                        class="opcion_1"
+                                        <?php echo seleccionarVarOption('sistema_1', 'o') ?>>
+                                        &nbsp;Octal
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                        name="sistema_1" id="sist_1_4" value="h"
+                                        class="opcion_1" 
+                                        <?php echo seleccionarVarOption('sistema_1', 'h') ?>>
+                                        &nbsp;Hexadecimal
+                                    </label>
+                                </div>
+                            </div>
+                        </div><!-- .row -->
+
+                        <button class="btn btn-success" type="button"
+                        id="bconvertirnt">Convertir</button>
+                    </form>
+                    <br>
+
+                    <?php 
+                    if (isset($error_2) && (trim($error_2) != '')) {
+                    ?>
+
+                    <p class="bg-danger text-danger"><?php echo $error_2 ?></p>
+                    
+                    <?php 
+                    }//fin if
+                    
+                    if (isset($texto)) {
+                    ?>
+
+                    <strong>Texto</strong>
+                    <textarea name="resultado_2" id="resultado_2" rows="4" 
+                    readonly="1" class="form-control"><?php echo $texto ?></textarea>
+                    
+                    <?php 
+                    }//fin if 
+                    ?>
+                </div>
+            </div>
+            <!-- /.row -->
+
+            <!-- acerca de -->
+			<div class="modal fade" id="acercade" tabindex="-1" role="dialog"
+			aria-labelledby="acercade_label" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close"
+							data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title"><span class="negrita">Acerca de...</span></h4>
+						</div>
+						
+						<div class="modal-body">
+							<div class="container-fluid">
+								<h3><?php echo $config['sistema'] ?></h3>
+								
+                                <p>
+									<strong>Aplicacion web para convertir texto a numero y viceversa.</strong>
+								</p>
+
+								<p>
+									<strong>Versi&oacute;n:</strong>&nbsp;20.04
+                                    <br />
+									<strong>Subversi&oacute;n:</strong>&nbsp;08
+                                    <br />
+									<strong>An&aacute;lisis y desarrollo:</strong>&nbsp;
+                                    Ariel Balmaceda. Analista Programador.
+                                    <br />
+									<strong>Contacto:</strong>&nbsp;absoft.dev@gmail.com
+                                    <br />
+									<strong>Ficha T&eacute;cnica</strong>
+									<br>
+									Front-end: Bootstrap, HTML5, JQuery.
+                                    <br>Back-end: PHP 5.
+								<p>
+
+								<p>
+                                    <strong>&copy;2018. Todos los derechos reservados</strong>
+								</p>
+							</div>
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary btn-flat"
+							data-dismiss="modal">Cerrar</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			<!-- /.acerca de -->
+        </div>
+        <!-- /.container -->
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+        crossorigin="anonymous"></script>
+
+        <!-- -->
+        <script src="assets/js/mis_clases/bs-validar_form.class.js"></script>
+        <script src="assets/js/main.min.js"></script>
+    </body>
+</html>
