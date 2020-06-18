@@ -1,7 +1,7 @@
 # wConvertidorTexto.
-
 Aplicacion web en PHP para convertir texto a numero y viceversa.
 
+![Demo](screenshot.jpg "Demo")
 
 ## Comenzando 🚀
 
